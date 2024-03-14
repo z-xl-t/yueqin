@@ -25,7 +25,7 @@
 
 乐音体系中有 97 个音，而钢琴一般为 88 个，分为大字组和小字组，其中小字一组的 C 音，为中央 C 音。
 
-![](./images/gangqinanjian.jpeg)
+![](./images/anjian_gangqin.jpeg)
 
 [为什么学音乐的人都要练钢琴？-知乎](https://www.zhihu.com/question/38685291)
 
@@ -48,4 +48,5 @@ PS：简谱起源于法国。
 
 [简谱-wiki](https://zh.wikipedia.org/wiki/%E7%AE%80%E8%B0%B1)
 [为何五线谱较简谱在国际上更流行？](https://www.zhihu.com/question/20124726)
+
 
