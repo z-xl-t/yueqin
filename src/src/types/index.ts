@@ -12,17 +12,27 @@ export interface YinFuType extends YinFuBaseType {
     fu: number, // 0-1 0 表示无附点，1 表示有附点， 附点为增加当前音符时值的一半
 }
 
-// svg 的基本属性
-export interface SvgAttrType{
-    width: number,
-    height: number,
-    viewBox: string,
-    fontSize: string
-}
-
 // svg 的 text 的三个基本属性
 export interface SvgTextAttrType {
     x: number,
     y: number,
-    content: string
+    content: string,
+}
+
+// 音符的 svg 数据，使用 <g> 标签包裹
+export interface SvgTextYinFuBaseType {
+    yinfuBase: YinFuBaseType,
+    svgTextBase: SvgTextAttrType,
+    svgTextGao: SvgTextAttrType[],
+    svgTextDi: SvgTextAttrType[]
+}
+
+
+// svg 中 line 的五个基本属性
+export interface SvgLineAttrType {
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    stroke: string,
 }
