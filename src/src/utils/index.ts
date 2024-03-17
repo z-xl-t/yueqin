@@ -1,3 +1,4 @@
+// 只能拍平一层数组 [[1,2], [3,4]] => [1,2,3,4]
 export function flat(arr:any[]){
 	if(Object.prototype.toString.call(arr) != "[object Array]"){return false};
 	const res=[] as any[];
