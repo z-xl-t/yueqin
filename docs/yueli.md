@@ -20,6 +20,10 @@
 [十二平均律-维基百科](https://zh.wikipedia.org/wiki/%E5%8D%81%E4%BA%8C%E5%B9%B3%E5%9D%87%E5%BE%8B)
 [人们为什么选择了十二平均律？](https://zhuanlan.zhihu.com/p/140709959)
 
+一个八度与十二平均律， 全全半全全全半
+```bash
+C  C#  D  D# E  F F# G G# A  A#  B  C
+```
 
 ### 钢琴
 
