@@ -1,6 +1,6 @@
 // 简谱中音符类型
 export interface JianPuBaseType {
-    ji: number, // 0-7 基本音符， 0 为休止符，1-7 分别是 do la mi ...
+    ji: string, // 0-7 基本音符，及其升音， 0 为休止符，1-7 分别是 do la mi ...
     gao: number, // 0 代表无，1-n ... 代表高 1-n 个八度，
     di: number, // 0 代表无， 1-n ... 代表低 1-n 个八度
 }
@@ -11,11 +11,16 @@ export interface JianPuType extends JianPuBaseType {
     jian?: number // 0 代表无，1-n ... 代表减少为四分音符的 1/(2*n) 时长
     fu?: number, // 0-1 0 表示无附点，1 表示有附点， 附点为增加当前音符时值的一半
 }
+interface JianPuArrayType extends Array<JianPuType> { }  
+export type { JianPuArrayType };
 
-// svg 的 text 的三个基本属性
-export interface SvgTextAttrType {
+export interface PointType {
     x: number,
     y: number,
+}
+
+// svg 的 text 的三个基本属性，用来表示第几品，第几弦，和简谱名
+export interface SvgTextAttrType extends PointType  {
     content: string,
 }
 
@@ -27,7 +32,7 @@ export interface SvgTextJianPuType {
 }
 
 
-// svg 中 line 的五个基本属性, 用于构造 月琴 琴弦和品
+// svg 中 line 的五个基本属性, 用于构造月琴琴弦和品的线段
 export interface SvgLineAttrType {
     x1: number,
     y1: number,
@@ -39,12 +44,12 @@ export interface SvgLineAttrType {
 // 钢琴按键，采用科学音高记法
 // 基本音
 export interface PianoKeyBaseType {
-    basePiano: string, // 如果为空，说明是黑键，应该从 PianoKey 中获取升音或降音
-    current: number  // 4
+    baseIdx: number // 88 键钢琴， 序号从 1-88
+    basePiano: string, // 如果是黑键，需要从升降音里获取，为了方便统一设置成上一个音的升音
+    current: number  // 跟 basePiano 组合，例如 C + 4 为 C4 音
 }
 
 // 当前音，可能是别的音的升音或降音， 也可能是重升或重降
-// 
 export interface PianoKeyType extends PianoKeyBaseType {
     sharpBase?: PianoKeyBaseType, // 从哪个音升
     flatBase?: PianoKeyBaseType, // 从哪个音降
@@ -62,36 +67,26 @@ export interface PianoSharpOrFlatType {
     idx: number
 }
 
-export interface JianPuWidthPianoKeyType {
-    pianoKey: PianoKeyType,
-    jianpu: JianPuType
-}
+// 民乐月琴固定点位
+export interface YueQinPingDiaoBaseFixedType {
+    xianIdx: number // 1, 2 ... 对应 1,2,... 弦
+    pingIdx:  number // 0,1,2 ... 对应 1,2,.. 品, 0 代表空弦音
+    pianoKey: PianoKeyType // 每个位置都有固定音高
+} 
 
 // 十二平均律转调，简谱和形式，
+// 一般 C 就是指 C4， D 指 D4
 // 1=C 1=D ...
-export interface EqualTemperamentType{
-    pianoFixed: PianoKeyType, 
-    jianFixed: number,    // 简谱首调固定为 1= 
-    pianoKeys: PianoKeyType[],
-    jianPus: JianPuType[],
-    jianpuWithPianoKeys: JianPuWidthPianoKeyType[]
+export interface EqualTemperamentType {
+    jianPuBaseKey: JianPuType, // 简谱首调固定为 1
+    pianoBaseKey: PianoKeyType,  // 对应的调号 C
 }
 
-// 民乐月琴点位
-export interface YueQinPingDiaoBaseType {
-    xianIdx: number // 1, 2 ... 对应 1,2,... 弦
-    pingIdx:  number // 1,2 ... 对应 1,2,.. 品
-    pianoKey: PianoKeyType // 每个位置都有固定音高
+export interface YueQinEqualTemperamentType extends EqualTemperamentType {
+    yueQinFixed: YueQinPingDiaoBaseFixedType, // 对应的月琴音名
+    JianPu: JianPuType, // 对应的简谱名
 }
 
-// 民乐月琴的各品各弦的位置，对应的钢琴按键和简谱号
-export interface YueQinPingDiaoType extends JianPuWidthPianoKeyType {
-    yueQinPingDiao: YueQinPingDiaoBaseType
-}
 
-// 对应的 svg 坐标
-// 此数据，包含 svg 点位，月琴点位 以及 简谱和钢琴点位
-
-export interface SvgYueQinPingDiaoType extends YueQinPingDiaoType {
-    svgYueQinPingDiao: SvgTextJianPuType
-}
+// 包含月琴 svg 点位，以及对应的简谱名
+export interface SvgYueQinPingDiaoType extends PointType, JianPuType {}
