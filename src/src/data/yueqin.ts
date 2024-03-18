@@ -1,89 +1,33 @@
-// 民乐乐琴固定定调 4弦g3， 3弦 d4， 2 弦 g4， 1弦 d5
-// 默认为 16 品
-// 月琴常用大调音阶 1=C，1=D，1=bE，1=F，1=G，1=A，1=bB
-// 十二平均律推算 全全半全全全半
-import type {
-  EqualTemperamentType,
-  JianPuArrayType,
-  PianoKeyType,
-  YueQinEqualTemperamentType,
-  YueQinPingDiaoBaseFixedType
-} from '@/types'
-import { pianoKeys } from './pianoKeys'
-import { jianPus } from './jianPus'
+import type { PianoKeyType } from "@/types";
 
-const yueQinPingDiaoBaseFixedArray: YueQinPingDiaoBaseFixedType[][] = getYueQinPingDiaoBaseFixed()
+// 月琴定调 g3,d4,g4,d5
+export const dingXian: PianoKeyType[] = [
+  { baseIdx: 35, basePiano: 'G', current: 3 },
+  { baseIdx: 42, basePiano: 'D', current: 4 },
+  { baseIdx: 47, basePiano: 'G', current: 4 },
+  { baseIdx: 54, basePiano: 'D', current: 5 }
+]
+// 四弦，16品
+export const xianNum = 4
+export const pingNum = 16
 
-function getYueQinPingDiaoBaseFixed() {
-  const tmp: YueQinPingDiaoBaseFixedType[][] = []
-  // g3 d4, g4 d5
-  const xianPiano: PianoKeyType[] = [
-    { baseIdx: 35, basePiano: 'G', current: 3 },
-    { baseIdx: 42, basePiano: 'D', current: 4 },
-    { baseIdx: 47, basePiano: 'G', current: 4 },
-    { baseIdx: 54, basePiano: 'D', current: 5 }
-  ]
-  const pingNum = 16
-  for (let i = 0; i < pingNum + 1; ++i) {
-    tmp.push([])
-    for (let j = 0; j < xianPiano.length; ++j) {
-      const item = pianoKeys.find(
-        (item) => item.baseIdx == xianPiano[j].baseIdx + i
-      ) as PianoKeyType
-      tmp[i].push({ xianIdx: xianPiano.length - j, pingIdx: i, pianoKey: item })
-    }
-  }
-  return tmp
-}
-const cEqualTemperament: EqualTemperamentType = {
-  jianPuBaseKey: { ji: '1', gao: 0, di: 0 },
-  pianoBaseKey: { baseIdx: 40, basePiano: 'C', current: 4 }
+// 整个月琴的坐标定位， 以 4 弦 16 品为例， 应该是 8 x 20 
+// y 点 为 0（头）, 40（弦名） 80 (弦线起始点) 800（弦线结束点）
+// x 点 为 0 （头）， 20（品名）， 100（品线起始点）， 400（品线结束点）
+const axisX = [0, 20, 100, 137.5, 212.5, 287.5, 362.5, 400]
+const axisY = [
+  0, 40, 80, 121.875, 165.625, 209.375, 253.125, 296.875, 340.625, 384.375, 428.125, 471.875,
+  515.625, 559.375, 603.125, 646.875, 690.625, 734.375, 778.125, 800
+]
+
+
+const yueqin = {
+  dingXian,
+  xianNum,
+  pingNum,
+  axisX,
+  axisY
 }
 
-function getYueQinEqualTemperamentArray(
-  yueQinPingDiaoBaseFixedArray: YueQinPingDiaoBaseFixedType[][],
-  equalTemperament: EqualTemperamentType
-): YueQinEqualTemperamentType[][] {
-  const tmp: YueQinEqualTemperamentType[][] = []
+export default yueqin
 
-  // 月琴与钢琴映射， 已完成，从 yueQinPingDiaoBaseFixedArray 获取数据
-  // 钢琴与简谱移调映射 使用 cEqualTemperament 、pianoKeys、jianPus、 完成
-  // 月琴与简谱之间的关系
-  for (let i = 0; i < yueQinPingDiaoBaseFixedArray.length; ++i) {
-    tmp.push([])
-    for (let j = 0; j < yueQinPingDiaoBaseFixedArray[i].length; ++j) {
-      const item = yueQinPingDiaoBaseFixedArray[i][j]
-      const x = mapPianoWithJianPu(item, pianoKeys, jianPus, equalTemperament)
-      tmp[i].push(x)
-    }
-  }
-  return tmp
-}
-
-function mapPianoWithJianPu(
-  yueqin: YueQinPingDiaoBaseFixedType,
-  pianoKeys: PianoKeyType[],
-  jianPus: JianPuArrayType,
-  equalTemperament: EqualTemperamentType
-): YueQinEqualTemperamentType {
-  const tmp = {} as YueQinEqualTemperamentType
-
-  tmp.jianPuBaseKey = equalTemperament.jianPuBaseKey
-  tmp.pianoBaseKey = equalTemperament.pianoBaseKey
-  tmp.yueQinFixed = yueqin
-
-  const pianoBaseIdx = pianoKeys.findIndex(
-    (item) => item.baseIdx === equalTemperament.pianoBaseKey.baseIdx
-  )
-  const pianoIdx = pianoKeys.findIndex((item) => item.baseIdx === yueqin.pianoKey.baseIdx)
-  const jianPuBaseIdx = jianPus.findIndex(
-    (item) =>
-      item.ji === equalTemperament.jianPuBaseKey.ji &&
-      item.gao === equalTemperament.jianPuBaseKey.gao &&
-      item.di === equalTemperament.jianPuBaseKey.di
-  )
-  tmp.JianPu = jianPus[pianoIdx - pianoBaseIdx + jianPuBaseIdx]
-  return tmp
-}
-
-export { yueQinPingDiaoBaseFixedArray, cEqualTemperament, getYueQinEqualTemperamentArray }

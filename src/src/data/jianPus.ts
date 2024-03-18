@@ -1,8 +1,8 @@
-import type {JianPuArrayType } from '@/types';
+import type {JianPuType } from '@/types';
 
 // 7个八度,高低各0，足够囊括月琴的音域
 // 同样遵循 十二平均律，为了方便，统一为上一个音升半音
-const jianPus: JianPuArrayType = [
+const jianPus: JianPuType[] = [
 
   { ji: '1', gao: 0, di: 2},
   { ji: '1#', gao: 0, di: 2},

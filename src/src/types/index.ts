@@ -11,34 +11,32 @@ export interface JianPuType extends JianPuBaseType {
     jian?: number // 0 代表无，1-n ... 代表减少为四分音符的 1/(2*n) 时长
     fu?: number, // 0-1 0 表示无附点，1 表示有附点， 附点为增加当前音符时值的一半
 }
-interface JianPuArrayType extends Array<JianPuType> { }  
-export type { JianPuArrayType };
 
 export interface PointType {
     x: number,
     y: number,
+    offsetX?: number,
+    offsetY?: number
 }
 
-// svg 的 text 的三个基本属性，用来表示第几品，第几弦，和简谱名
-export interface SvgTextAttrType extends PointType  {
+// 用来表示第几品，第几弦
+export interface PointTextType extends PointType  {
     content: string,
 }
 
-//  svg 的 Jianpu 数据，使用 <text> 和 <g> 标签
-export interface SvgTextJianPuType {
-    svgTextBase: SvgTextAttrType,
-    svgTextGao: SvgTextAttrType[],
-    svgTextDi: SvgTextAttrType[]
+//  用来表示简谱中的音符
+export interface JianPuTextType {
+    textBase: PointTextType,
+    textGao: PointTextType[],
+    textDi: PointTextType[]
 }
 
-
-// svg 中 line 的五个基本属性, 用于构造月琴琴弦和品的线段
-export interface SvgLineAttrType {
+// 线段
+export interface LineType {
     x1: number,
     y1: number,
     x2: number,
     y2: number,
-    stroke: string,
 }
 
 // 钢琴按键，采用科学音高记法
@@ -68,7 +66,7 @@ export interface PianoSharpOrFlatType {
 }
 
 // 民乐月琴固定点位
-export interface YueQinPingDiaoBaseFixedType {
+export interface YueQinYinBaseFixedType {
     xianIdx: number // 1, 2 ... 对应 1,2,... 弦
     pingIdx:  number // 0,1,2 ... 对应 1,2,.. 品, 0 代表空弦音
     pianoKey: PianoKeyType // 每个位置都有固定音高
@@ -78,15 +76,15 @@ export interface YueQinPingDiaoBaseFixedType {
 // 一般 C 就是指 C4， D 指 D4
 // 1=C 1=D ...
 export interface EqualTemperamentType {
+    comment: string; // 备注 C 大调
     jianPuBaseKey: JianPuType, // 简谱首调固定为 1
     pianoBaseKey: PianoKeyType,  // 对应的调号 C
 }
 
+// 简谱 <- -> 月琴音名
 export interface YueQinEqualTemperamentType extends EqualTemperamentType {
-    yueQinFixed: YueQinPingDiaoBaseFixedType, // 对应的月琴音名
+    yueQinFixed: YueQinYinBaseFixedType, // 对应的月琴音名
     JianPu: JianPuType, // 对应的简谱名
 }
 
-
-// 包含月琴 svg 点位，以及对应的简谱名
-export interface SvgYueQinPingDiaoType extends PointType, JianPuType {}
+export interface YueQinYinBaseFixedPointType extends PointType, YueQinYinBaseFixedType {}

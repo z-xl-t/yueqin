@@ -108,3 +108,4 @@ const pianoSharpOrFlatArray:  PianoSharpOrFlatType[] = [
     {symbol: '𝄪', idx: 2}, 
     {symbol: '𝄫', idx: 3}]
 export { pianoKeys, pianoSharpOrFlatArray }
+
