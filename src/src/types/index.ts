@@ -1,6 +1,6 @@
 // 简谱中音符类型
 export interface JianPuBaseType {
-    ji: string, // 0-7 基本音符，及其升音， 0 为休止符，1-7 分别是 do la mi ...
+    base: string, // 0-7 基本音符，及其升音， 0 为休止符，1-7 分别是 do la mi ...
     gao: number, // 0 代表无，1-n ... 代表高 1-n 个八度，
     di: number, // 0 代表无， 1-n ... 代表低 1-n 个八度
 }
@@ -83,8 +83,11 @@ export interface EqualTemperamentType {
 
 // 简谱 <- -> 月琴音名
 export interface YueQinEqualTemperamentType extends EqualTemperamentType {
-    yueQinFixed: YueQinYinBaseFixedType, // 对应的月琴音名
-    JianPu: JianPuType, // 对应的简谱名
-}
+    yueQinFixed: YueQinYinBaseFixedType , // 对应的月琴音名
+    jianPu: JianPuType, // 对应的简谱名
+} 
+
+// 简谱 <- -> 月琴音名 <- -> svg 坐标点
+export interface YueQinEqualTemperamentSvgPointType extends PointType, YueQinEqualTemperamentType {} 
 
 export interface YueQinYinBaseFixedPointType extends PointType, YueQinYinBaseFixedType {}

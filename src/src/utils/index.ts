@@ -2,14 +2,17 @@ import type {
   EqualTemperamentType,
   JianPuType,
   PianoKeyType,
+  PointType,
+  YueQinEqualTemperamentSvgPointType,
   YueQinEqualTemperamentType,
+  YueQinYinBaseFixedPointType,
   YueQinYinBaseFixedType
 } from '@/types'
 
 // 只能拍平一层数组 [[1,2], [3,4]] => [1,2,3,4]
-export function flat(arr: any[]) {
+export function flat(arr: any[]): any[] {
   if (Object.prototype.toString.call(arr) != '[object Array]') {
-    return false
+    return []
   }
   const res = [] as any[]
   arr.map((item) => {
@@ -66,6 +69,24 @@ function getYueQinYinBaseFixed(
     }
     return tmp
   }
+
+  function getSvgYueQinEqualTemperamentArray (yueQinEqualTemperamentArray:YueQinEqualTemperamentType[][], svgPoints: PointType[][]): YueQinEqualTemperamentSvgPointType[][] {
+    const tmp: YueQinEqualTemperamentSvgPointType[][] = []
+    for(let i=0; i<svgPoints.length; ++i) {
+      tmp.push([] as YueQinEqualTemperamentSvgPointType[])
+      for (let j=0; j<svgPoints[j].length; ++j) {
+        const x = svgPoints[i][j].x
+        const y = svgPoints[i][j].y
+        const offsetX = 10
+        const offsetY = -10
+        const yueQinFixed = yueQinEqualTemperamentArray[i][j].yueQinFixed
+        const jianPu = yueQinEqualTemperamentArray[i][j].jianPu
+        tmp[i].push({x,y,offsetX,offsetY, yueQinFixed, jianPu })
+      }
+    }
+    return tmp
+
+  }
   
   function mapPianoWithJianPu(
     yueqin: YueQinYinBaseFixedType,
@@ -85,11 +106,11 @@ function getYueQinYinBaseFixed(
     const pianoIdx = pianoKeys.findIndex((item) => item.baseIdx === yueqin.pianoKey.baseIdx)
     const jianPuBaseIdx = jianPus.findIndex(
       (item) =>
-        item.ji === equalTemperament.jianPuBaseKey.ji &&
+        item.base === equalTemperament.jianPuBaseKey.base &&
         item.gao === equalTemperament.jianPuBaseKey.gao &&
         item.di === equalTemperament.jianPuBaseKey.di
     )
-    tmp.JianPu = jianPus[pianoIdx - pianoBaseIdx + jianPuBaseIdx]
+    tmp.jianPu = jianPus[pianoIdx - pianoBaseIdx + jianPuBaseIdx]
     return tmp
   }
   
@@ -97,6 +118,7 @@ function getYueQinYinBaseFixed(
     flat,
     getYueQinYinBaseFixed,
     getYueQinEqualTemperamentArray,
-    mapPianoWithJianPu
+    mapPianoWithJianPu,
+    getSvgYueQinEqualTemperamentArray
   }
 export default utils

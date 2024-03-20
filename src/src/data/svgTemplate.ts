@@ -63,28 +63,16 @@ for(let i=0; i<pingAxisY.length; ++i) {
 // 音
 
 const yinAxisX =  axisX.slice(3, axisX.length-1)
-const yinAxisY =  axisY.slice(3, axisY.length-1)
+const yinAxisY =  axisY.slice(2, axisY.length-1)
 const yueQinYinBaseFixed = utils.getYueQinYinBaseFixed(yueqin.dingXian, yueqin.pingNum, pianoKeys)
-const yueQinYinPoints: YueQinYinBaseFixedPointType[][] = []
+const yueQinYinPoints: PointType[][] = []
 
 for (let i=0; i<yinAxisY.length; ++i) {
   yueQinYinPoints.push([])
   for(let j=0; j<yinAxisX.length; ++j) {
-    const tmp = yueQinYinBaseFixed[i][j];
-    const point: PointType = {x: yinAxisX[j], y:yinAxisY[i]}
-    yueQinYinPoints[i].push({...point, ...tmp});
+    yueQinYinPoints[i].push({x: yinAxisX[j], y:yinAxisY[i]});
   }
 }
-
-// for(let i=0; i<zy.length; ++i) {
-//   yueQinSvgTemplate.SvgYueQinPingDiaoPoint.push([])
-//   for (let j=0; j<zx.length; ++j) {
-//     const t = yueQinCEqualTemperamentArray[i][j]
-//     const point: PointType = {x: zx[j], y:zy[i]}
-//     yueQinSvgTemplate.SvgYueQinPingDiaoPoint[i].push({...point, ...t.JianPu})
-//   }
-// }
-
 
 const svgTemplate = {
   baseSvgWidth,
@@ -99,6 +87,7 @@ const svgTemplate = {
   svgXianNameText,
   svgPingLine,
   svgPingNameText,
+  yueQinYinBaseFixed,
   yueQinYinPoints
 }
 
