@@ -91,3 +91,14 @@ export interface YueQinEqualTemperamentType extends EqualTemperamentType {
 export interface YueQinEqualTemperamentSvgPointType extends PointType, YueQinEqualTemperamentType {} 
 
 export interface YueQinYinBaseFixedPointType extends PointType, YueQinYinBaseFixedType {}
+
+
+// 可选择的
+
+export interface YueQinOptions {
+    equalTemperament: EqualTemperamentType, // 1=X 简谱定调
+    xianNum: number, // 弦的数量 1-4
+    pingNum: number, // 品的数量
+    xianEmptyPianoKey: PianoKeyBaseType[] // 每跟弦的空弦音
+    ifShowSharp: boolean   // 是否隐藏半音
+} 
