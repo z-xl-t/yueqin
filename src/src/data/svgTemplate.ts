@@ -2,94 +2,100 @@ import type {
   LineType,
   PointTextType,
   PointType,
-  YueQinYinBaseFixedPointType,
+  SvgYueQinTemplateDataType,
+  SvgYueQinTemplateType,
+  YueQinOptionsType,
 } from '@/types'
 
-import yueqin from '../data/yueqin'
-import utils from '@/utils'
-import {pianoKeys} from '@/data/pianoKeys'
+export const svgTemplate:SvgYueQinTemplateType = {
+  data: {} as SvgYueQinTemplateDataType,
+  yueqinOptions: {} as YueQinOptionsType,
+  initTemplate: function(yueqinOptions: YueQinOptionsType) {
+    this.yueqinOptions = yueqinOptions
 
-const baseSvgWidth = 400
-const baseSvgHeight = 800
-const svgFontSize = '20px'
-const lineStroke = 'blue'
-const lineWidth = 2
-const circleRadius = 2
-// allPoint 月琴模板的所有点位
+    // 整个月琴的坐标定位， 以 4 弦 16 品为例， 应该是 (2 + 4 + 2) x (2 + 16 + 2) 
+    // y 点 为 0（头）, 40（弦名） 100 (弦线起始点) 
+    // x 点 为 0 （头）， 40（品名）， 100（品线起始点）
+    // const axisX = [0, 20, 100, 137.5, 212.5, 287.5, 362.5, 400]
+    // const axisY = [
+    //     0, 40, 80, 121.875, 165.625, 209.375, 253.125, 296.875, 340.625, 384.375, 428.125, 471.875,
+    //     515.625, 559.375, 603.125, 646.875, 690.625, 734.375, 778.125, 800
+    //   ]
 
-const axisX = yueqin.axisX
-const axisY = yueqin.axisY
+    const axisX = [0, 40]
+    const axisY = [0, 60]
+    const stepX = 80
+    const stepY = 40
 
-const svgAllPoint:PointType[][] = [] 
-for (let i = 0; i <   axisY.length; ++i) {
-  svgAllPoint.push([] as PointType[])
-  for (let j = 0; j < axisX.length; ++j) {
-    svgAllPoint[i].push({ x: axisX[j], y: axisY[i] })
-  }
+    for(let i=0; i<yueqinOptions.xianNum+2; ++i) {
+      axisX.push(axisX[axisX.length - 1] + stepX)
+    }
+    for(let i=0; i<yueqinOptions.pingNum+2; ++i) {
+      axisY.push(axisY[axisY.length - 1] + stepY)
+    }
+    const svgAllPoint:PointType[][] = [] 
+    for (let i = 0; i < axisX.length; ++i) {
+      svgAllPoint.push([] as PointType[])
+      for (let j = 0; j < axisY.length; ++j) {
+        svgAllPoint[i].push({ x: axisX[i], y: axisY[j] })
+      }
+    }
+
+    // 弦线坐标
+    const xianAxisX = axisX.slice(3, axisX.length-1)
+    const xianAxisY = [axisY[2], axisY[axisY.length - 1]]
+    const svgXianLine: LineType[] = []
+
+    // 弦名
+    const xianTextY = axisY[1]
+    const svgXianNameText: PointTextType[] = []
+
+    for(let i=0; i< xianAxisX.length; ++i) {
+        svgXianLine.push({ x1: xianAxisX[i], y1: xianAxisY[0], x2: xianAxisX[i], y2:xianAxisY[1], })
+        const offsetX = -30
+        const offsetY = 0
+        svgXianNameText.push({ x: xianAxisX[i], y:xianTextY, offsetX, offsetY, content: `第 ${this.yueqinOptions.xianNum - i} 弦` })
+    }
+
+    // 品线
+    const pingAxisX = [axisX[2], axisX[axisX.length - 1]]
+    const pingAxisY =  axisY.slice(3, axisY.length-1)
+    const svgPingLine: LineType[] = []
+
+    // 品名
+    const pingTextX = axisX[1]
+    const svgPingNameText: PointTextType[] = []
+
+    for(let i=0; i<pingAxisY.length; ++i) {
+      svgPingLine.push({ x1: pingAxisX[0], y1: pingAxisY[i], x2: pingAxisX[1], y2: pingAxisY[i] })
+      svgPingNameText.push({ x: pingTextX, y: pingAxisY[i], content: `第 ${i+1} 品` })
+    }
+
+    // 音
+    const svgYinPoint: PointType[][] = []
+    const yinAxisX =  axisX.slice(3, axisX.length-1)
+    const yinAxisY =  axisY.slice(2, axisY.length-1)
+    for (let i=0; i<yinAxisX.length; ++i) {
+      svgYinPoint.push([])
+      for(let j=0; j<yinAxisY.length; ++j) {
+        const offsetX = 10
+        const offsetY = -10
+        svgYinPoint[i].push({x: yinAxisX[i], y: yinAxisY[j], offsetX, offsetY})
+      }
+    }
+
+    this.data.svgBaseWidth = axisX[axisX.length - 1]
+    this.data.svgBaseHeight = axisY[axisY.length - 1]
+    this.data.svgFontSize = '20px'
+    this.data.svgLineStroke = 'blue'
+    this.data.svgLineWidth = 2
+    this.data.svgCircleRadius = 2
+    this.data.svgAllPoint = svgAllPoint
+    this.data.svgXianLine = svgXianLine
+    this.data.svgXianNameText = svgXianNameText
+    this.data.svgPingLine = svgPingLine,
+    this.data.svgPingNameText = svgPingNameText
+    this.data.svgYinPoint = svgYinPoint
+
+  },
 }
-
-// 弦线坐标
-const xianAxisX = axisX.slice(3, axisX.length-1)
-const xianAxisY = [axisY[2], axisY[axisY.length - 1]]
-const svgXianLine: LineType[] = []
-
-// 弦名
-const xianTextY = axisY[1]
-const svgXianNameText: PointTextType[] = []
-
-for(let i=0; i< xianAxisX.length; ++i) {
-    svgXianLine.push({ x1: xianAxisX[i], y1: xianAxisY[0], x2: xianAxisX[i], y2:xianAxisY[1], })
-    const offsetX = -30
-    const offsetY = 0
-    svgXianNameText.push({ x: xianAxisX[i], y:xianTextY, offsetX, offsetY, content: `第 ${yueqin.xianNum - i} 弦` })
-}
-
-// 品线
-const pingAxisX = [axisX[2], axisX[axisX.length - 1]]
-const pingAxisY =  axisY.slice(3, axisY.length-1)
-const svgPingLine: LineType[] = []
-
-// 品名
-const pingTextX = axisX[1]
-const svgPingNameText: PointTextType[] = []
-
-for(let i=0; i<pingAxisY.length; ++i) {
-  svgPingLine.push({ x1: pingAxisX[0], y1: pingAxisY[i], x2: pingAxisX[1], y2: pingAxisY[i] })
-
-  svgPingNameText.push({ x: pingTextX, y: pingAxisY[i], content: `第 ${i+1} 品` })
-}
-
-
-// 音
-
-const yinAxisX =  axisX.slice(3, axisX.length-1)
-const yinAxisY =  axisY.slice(2, axisY.length-1)
-const yueQinYinBaseFixed = utils.getYueQinYinBaseFixed(yueqin.dingXian, yueqin.pingNum, pianoKeys)
-const yueQinYinPoints: PointType[][] = []
-
-for (let i=0; i<yinAxisY.length; ++i) {
-  yueQinYinPoints.push([])
-  for(let j=0; j<yinAxisX.length; ++j) {
-    yueQinYinPoints[i].push({x: yinAxisX[j], y:yinAxisY[i]});
-  }
-}
-
-const svgTemplate = {
-  baseSvgWidth,
-  baseSvgHeight,
-  svgFontSize,
-  lineStroke,
-  lineWidth,
-  circleRadius,
-  yueqin,
-  svgAllPoint,
-  svgXianLine,
-  svgXianNameText,
-  svgPingLine,
-  svgPingNameText,
-  yueQinYinBaseFixed,
-  yueQinYinPoints
-}
-
-
-export  { svgTemplate }
