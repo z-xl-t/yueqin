@@ -65,34 +65,14 @@ export interface PianoSharpOrFlatType {
     idx: number
 }
 
-
-export interface YinPianoFixed {
-    xianIdx: number // 1, 2 ... 对应 1,2,... 弦
-    pingIdx:  number // 0,1,2 ... 对应 1,2,.. 品, 0 代表空弦音
-    pianoKey: PianoKeyType // 每个位置都有固定音高
-} 
-
-
-
 // 十二平均律转调，简谱和形式，
 // 一般 C 就是指 C4， D 指 D4
 // 1=C 1=D ...
 export interface EqualTemperamentType {
     comment: string; // 备注 C 大调
-    jianPuBaseKey: JianPuType, // 简谱首调固定为 1
+    jianPuBaseKey: JianPuType, // 简谱首调固定为 1 0 0
     pianoBaseKey: PianoKeyType,  // 对应的调号 C
 }
-
-// 简谱 <- -> 月琴音名
-export interface YueQinEqualTemperamentType extends EqualTemperamentType {
-    yueQinFixed: YinPianoFixed , // 对应的月琴音名
-    jianPu: JianPuType, // 对应的简谱名
-} 
-
-// 简谱 <- -> 月琴音名 <- -> svg 坐标点
-export interface YueQinEqualTemperamentSvgPointType extends PointType, YueQinEqualTemperamentType {} 
-
-export interface YueQinYinBaseFixedPointType extends PointType, YinPianoFixed {}
 
 
 // 月琴的配置项
@@ -104,9 +84,6 @@ export interface YueQinOptionsType {
     xianEmptyPianoKey: PianoKeyBaseType[] // 每跟弦的空弦音
     ifShowSharp: boolean   // 是否隐藏半音
 } 
-
-
-
 
 
 // svg-template-data
@@ -123,13 +100,14 @@ export interface SvgYueQinTemplateDataType {
     svgXianNameText: PointTextType[],
     svgPingLine: LineType[],
     svgPingNameText: PointTextType[],
-    svgYinPoint: PointType[][]
+    svgYinPoint: PointType[][],
+    svgYinPianoKey: PianoKeyType[][]
+    svgYinJianPu: JianPuBaseType[][]
 }
 
 
 export interface SvgYueQinTemplateType {
     data: SvgYueQinTemplateDataType,
     yueqinOptions: YueQinOptionsType
-    initTemplate: (yueqinOptions: YueQinOptionsType) => void
-    
+    updateSvgTemplate: (yueqinOptions: YueQinOptionsType) => void
 }

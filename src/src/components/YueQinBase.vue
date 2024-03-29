@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue'
 import equalTemperaments from '@/data/equalTemperaments'
-import { QSelect } from 'quasar'
+import { QSelect,useQuasar } from 'quasar'
 import SvgYueQinTemplate from '@/components/SvgYueQinTemplate.vue'
 import { yueqinOptions } from '@/options/yueqinOptions'
 import { svgTemplate } from '@/data/svgTemplate'
-import type { SvgYueQinTemplateDataType } from '@/types'
+import type { PianoKeyType, SvgYueQinTemplateDataType } from '@/types'
+import { pianoKeys } from '@/data/pianoKeys'
+
+const $q = useQuasar()
 const equalTemperamentAll = ref(equalTemperaments)
 yueqinOptions.initYueQinOptionsType()
 const yueOptionResetFlag = ref(false)
 const options = ref(yueqinOptions.data)
 const svgTempleteData = ref({} as SvgYueQinTemplateDataType)
 updateSvgTemplete()
-
 function updateOptions() {
   yueqinOptions.setDataToLocalStorage()
   updateSvgTemplete()
@@ -25,10 +27,29 @@ function resetOptions() {
 }
 
 function updateSvgTemplete() {
-  svgTemplate.initTemplate(options.value);
+  const xianEmptyPianoKey = options.value.xianEmptyPianoKey
+  // 要将空弦，设置成正确的 idx
+  for(let i=0; i < xianEmptyPianoKey.length; ++i) {
+    const item = pianoKeys.find(item => item.basePiano == xianEmptyPianoKey[i].basePiano && item.current == xianEmptyPianoKey[i].current) as PianoKeyType
+    if (item) {
+      xianEmptyPianoKey[i].baseIdx = item.baseIdx
+    }
+    else {
+      // 如果超出A0-C8，而自动设置为 A0  
+      xianEmptyPianoKey[i].baseIdx = pianoKeys[0].baseIdx
+      xianEmptyPianoKey[i].basePiano = pianoKeys[0].basePiano
+      xianEmptyPianoKey[i].current = pianoKeys[0].current
+
+      $q.notify({
+          message: '超出A0-C8 范围，自动设置成A0',
+          color: 'purple'
+        })
+    }
+  }
+  svgTemplate.updateSvgTemplate(options.value);
   // 这样才会触发响应式，因为整个对象都发生改变了
   svgTempleteData.value = JSON.parse(JSON.stringify(svgTemplate.data))
-  console.log(svgTempleteData.value);
+
 }
 
 watch(

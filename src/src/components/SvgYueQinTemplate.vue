@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import type { YueQinOptionsType, SvgYueQinTemplateDataType } from '@/types'
 
 const props = defineProps<{
@@ -7,7 +6,6 @@ const props = defineProps<{
   svgTemplateData: SvgYueQinTemplateDataType
 }>()
 
-console.log(props.svgTemplateData)
 
 </script>
 <template>
@@ -74,26 +72,35 @@ console.log(props.svgTemplateData)
           :r="svgTemplateData.svgCircleRadius"
         ></circle>
       </g>
-      <!-- 简谱点位
-      <g v-for="(item, i) in svgYueQinEqualTemperametArray" :key="i">
+      <!-- 简谱点位 -->
+      <g v-for="(item, i) in svgTemplateData.svgYinPoint" :key="i">
         <g v-for="(subItem, j) in item" :key="j">
           <text
             :x="subItem.x + subItem?.offsetX + 3"
             :y="subItem.y + subItem?.offsetY + (-4) * n  + (-14)"
-            v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
+            v-for="(n, k) in Array.from({ length: svgTemplateData.svgYinJianPu[i][j].gao }, (_, i) => i + 1)"
             :key="k"
           >.</text>
           <text :x="subItem.x + subItem?.offsetX" :y="subItem.y + subItem?.offsetY">{{
-            subItem.jianPu.base
+            svgTemplateData.svgYinJianPu[i][j].base
           }}</text>
           <text
             :x="subItem.x + subItem?.offsetX + 3"
             :y="subItem.y + subItem?.offsetY + (4) * n + (2)"
-            v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
+            v-for="(n, k) in Array.from({ length: svgTemplateData.svgYinJianPu[i][j].di }, (_, i) => i + 1)"
             :key="k"
           >.</text>
         </g>
-      </g> -->
+      </g>
+      <!-- 固定音高点位 -->
+      <g v-for="(item, i) in svgTemplateData.svgYinPoint" :key="i">
+        <g v-for="(subItem, j) in item" :key="j">
+          <text :x="subItem.x + subItem?.offsetX" :y="subItem.y + subItem?.offsetY - 50">{{
+            `${svgTemplateData.svgYinPianoKey[i][j].basePiano } - ${svgTemplateData.svgYinPianoKey[i][j].current}`
+          }}</text>
+      
+        </g>
+      </g>
     </svg>
   </div>
 </template>
