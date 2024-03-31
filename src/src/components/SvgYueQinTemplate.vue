@@ -64,7 +64,7 @@ function render() {
         <text
           v-for="(item, i) in svgTemplateData.svgXianNameText"
           :key="i"
-          :x="item.x + item?.offsetX"
+          :x="item.x + (item?.offsetX ?? 0)"
           :y="item.y"
         >
           {{ item.content }}
@@ -106,22 +106,22 @@ function render() {
             <g v-if="subItem.jianPu.base.includes('#')">
               <g v-if="yueqinOptions.ifShowSharp">
                 <text
-                :x="subItem.point.x + subItem.point?.offsetX + 3"
-                :y="subItem.point.y + subItem.point?.offsetY + -4 * n + -14"
+                :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+                :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + -4 * n + -14"
                 v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
                 :key="k"
               >
                 <tspan>.</tspan>
               </text>
               <text
-              :x="subItem.point.x + subItem.point?.offsetX"
-              :y="subItem.point.y + subItem.point?.offsetY"
+              :x="subItem.point.x + (subItem.point?.offsetX ?? 0)"
+              :y="subItem.point.y + (subItem.point?.offsetY ?? 0)"
             >
               <tspan>{{ subItem.jianPu.base }}</tspan>
             </text>
             <text
-              :x="subItem.point.x + subItem.point?.offsetX + 3"
-              :y="subItem.point.y + subItem.point?.offsetY + 4 * n + 2"
+              :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+              :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + 4 * n + 2"
               v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
               :key="k"
             >
@@ -131,22 +131,22 @@ function render() {
             </g>
             <g v-else>
               <text
-                :x="subItem.point.x + subItem.point?.offsetX + 3"
-                :y="subItem.point.y + subItem.point?.offsetY + -4 * n + -14"
+                :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+                :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + -4 * n + -14"
                 v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
                 :key="k"
               >
                 <tspan>.</tspan>
               </text>
               <text
-              :x="subItem.point.x + subItem.point?.offsetX"
-              :y="subItem.point.y + subItem.point?.offsetY"
+              :x="subItem.point.x + (subItem.point?.offsetX ?? 0)"
+              :y="subItem.point.y + (subItem.point?.offsetY ?? 0)"
             >
               <tspan>{{ subItem.jianPu.base }}</tspan>
             </text>
             <text
-              :x="subItem.point.x + subItem.point?.offsetX + 3"
-              :y="subItem.point.y + subItem.point?.offsetY + 4 * n + 2"
+              :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+              :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + 4 * n + 2"
               v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
               :key="k"
             >
@@ -161,8 +161,8 @@ function render() {
         <g v-for="(item, i) in svgTemplateData.svgYinPianoKey" :key="i">
           <g v-for="(subItem, j) in item" :key="j">
             <text
-              :x="subItem.point.x + subItem.point?.offsetX + 20"
-              :y="subItem.point.y + subItem.point?.offsetY - 20"
+              :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 20"
+              :y="subItem.point.y + (subItem.point?.offsetY ?? 0) - 20"
             >
               <tspan v-if="subItem.pianoKey.basePiano.includes('#')">
                 <tspan v-if="yueqinOptions.ifShowSharp">
