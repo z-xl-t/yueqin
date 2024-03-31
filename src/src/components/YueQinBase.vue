@@ -1,3 +1,4 @@
+<!-- eslint-disable no-self-assign -->
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import equalTemperaments from '@/data/equalTemperaments'
@@ -24,6 +25,9 @@ equalTemperamentAll.value = equalTemperaments
 options.value = yueqinOptions.data
 updateSvgTemplete()
 
+const basePianoOptions = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+const currentOptions = ['2', '3', '4', '5']
+
 function updateOptions() {
   yueqinOptions.setDataToLocalStorage()
 }
@@ -41,6 +45,7 @@ function updateAll() {
 function updateSvgTemplete() {
   const xianEmptyPianoKey = options.value.xianEmptyPianoKey
   // 要将空弦，设置成正确的 idx
+
   for (let i = 0; i < xianEmptyPianoKey.length; ++i) {
     const item = pianoKeys.find(
       (item) =>
@@ -50,13 +55,8 @@ function updateSvgTemplete() {
     if (item) {
       xianEmptyPianoKey[i].baseIdx = item.baseIdx
     } else {
-      // 如果超出A0-C8，而自动设置为 A0
-      xianEmptyPianoKey[i].baseIdx = pianoKeys[0].baseIdx
-      xianEmptyPianoKey[i].basePiano = pianoKeys[0].basePiano
-      xianEmptyPianoKey[i].current = pianoKeys[0].current
-
       $q.notify({
-        message: '超出A0-C8 范围，自动设置成A0',
+        message: '超出A0-C8 范围，不修改',
         color: 'purple'
       })
     }
@@ -148,8 +148,9 @@ watch(
       <div class="options-xian-empty-wrapper">
         <div class="options-xian-empty" v-for="(item, i) in options.xianEmptyPianoKey" :key="i">
           <div style="padding-right: 10px">{{ options.xianEmptyPianoKey.length - i }} 弦:</div>
-          <q-input style="width: 60px" v-model="item.basePiano" />
-          <q-input style="width: 60px" v-model="item.current" />
+          <q-select style="width: 60px" v-model="item.basePiano" :options="basePianoOptions" />
+
+          <q-select style="width: 60px" v-model="item.current" :options="currentOptions" />
         </div>
         <div class="options-explain">说明： 采用科学音高记法。</div>
         <div class="options-explain">C4 等于钢琴中小字一组的 c1</div>

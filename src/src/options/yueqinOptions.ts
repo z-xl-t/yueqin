@@ -7,7 +7,7 @@ export const yueqinOptions = {
   setDefaultYueQinOptionsType: function () {
     this.data = {
       equalTemperament: {
-        comment: 'C大调 C4',
+        comment: '1=C4',
         jianPuBaseKey: { base: '1', gao: 0, di: 0 },
         pianoBaseKey: { baseIdx: 40, basePiano: 'C', current: 4 }
       },
