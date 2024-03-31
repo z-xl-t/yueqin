@@ -1,6 +1,5 @@
 import type {
   EqualTemperamentType,
-  JianPuBaseType,
   JianPuType,
   LineType,
   PianoKeyType,
@@ -9,6 +8,8 @@ import type {
   SvgYueQinTemplateDataType,
   SvgYueQinTemplateType,
   YueQinOptionsType,
+  svgPointJianPuBaseType,
+  svgPointPianoKeyType,
 } from '@/types'
 import { pianoKeys } from './pianoKeys'
 import { jianPus } from './jianPus'
@@ -34,7 +35,7 @@ function mapPianoWithJianPu(
   )
 
   let jianPuIdx = pianoIdx - pianoEqualIdx + jianPuEqualIdx
-  console.log(pianoIdx, pianoEqualIdx, jianPuEqualIdx, jianPuIdx)
+  
   if (jianPuIdx < 0) {
     jianPuIdx = 0
   } else if (jianPuIdx > jianPus.length) {
@@ -109,13 +110,11 @@ export const svgTemplate:SvgYueQinTemplateType = {
       svgPingLine.push({ x1: pingAxisX[0], y1: pingAxisY[i], x2: pingAxisX[1], y2: pingAxisY[i] })
       svgPingNameText.push({ x: pingTextX, y: pingAxisY[i], content: `第 ${i+1} 品` })
     }
-
+    
     // 音的点位
     const svgYinPoint: PointType[][] = []
-    const svgYinPianoKey: PianoKeyType[][] = [] 
-    const svgYinJianPu: JianPuBaseType[][] = []
-
-
+    const svgYinPianoKey: svgPointPianoKeyType[][] = [] 
+    const svgYinJianPu: svgPointJianPuBaseType[][] = []
     const yinAxisX =  axisX.slice(3, axisX.length-1)
     const yinAxisY =  axisY.slice(2, axisY.length-1)
     for (let i=0; i<yinAxisX.length; ++i) {
@@ -126,9 +125,9 @@ export const svgTemplate:SvgYueQinTemplateType = {
         const offsetX = 10
         const offsetY = -10
 
-        // x y 坐标
-        svgYinPoint[i].push({x: yinAxisX[i], y: yinAxisY[j], offsetX, offsetY})
-
+          // x y 坐标
+        const point = {x: yinAxisX[i], y: yinAxisY[j], offsetX, offsetY}
+        svgYinPoint[i].push(point)
         // 固定音
         let baseIdx = pianoKeys.find(item => item.baseIdx === yueqinOptions.xianEmptyPianoKey[i].baseIdx)?.baseIdx
         if (!baseIdx) {
@@ -145,15 +144,12 @@ export const svgTemplate:SvgYueQinTemplateType = {
           }
         }  
         const pianoKey = pianoKeys.find((item) => item.baseIdx == baseIdx) as PianoKeyType
-        svgYinPianoKey[i].push(pianoKey)
+        svgYinPianoKey[i].push({point, pianoKey})
         // 对应简谱音
         const jianPu = mapPianoWithJianPu(pianoKey, pianoKeys, jianPus, yueqinOptions.equalTemperament)
-        svgYinJianPu[i].push(jianPu)
+        svgYinJianPu[i].push({point, jianPu})
       }
     }
-
-
-
     this.data.svgBaseWidth = axisX[axisX.length - 1]
     this.data.svgBaseHeight = axisY[axisY.length - 1]
     this.data.svgFontSize = '20px'

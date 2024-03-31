@@ -83,8 +83,22 @@ export interface YueQinOptionsType {
     pingNum: number, // 品的数量
     xianEmptyPianoKey: PianoKeyBaseType[] // 每跟弦的空弦音
     ifShowSharp: boolean   // 是否隐藏半音
+    ifShowJianPu: boolean // 是否显示简谱
+    ifShowPianoKey: boolean // 是否显示固定音
+    scale: number // 缩放尺寸
 } 
 
+
+
+export interface svgPointPianoKeyType {
+    point:  PointType,
+    pianoKey:  PianoKeyType
+}
+
+export interface svgPointJianPuBaseType {
+    point:  PointType,
+    jianPu:  JianPuBaseType
+}
 
 // svg-template-data
 export interface SvgYueQinTemplateDataType {
@@ -101,9 +115,10 @@ export interface SvgYueQinTemplateDataType {
     svgPingLine: LineType[],
     svgPingNameText: PointTextType[],
     svgYinPoint: PointType[][],
-    svgYinPianoKey: PianoKeyType[][]
-    svgYinJianPu: JianPuBaseType[][]
+    svgYinPianoKey: svgPointPianoKeyType[][]
+    svgYinJianPu: svgPointJianPuBaseType[][]
 }
+
 
 
 export interface SvgYueQinTemplateType {

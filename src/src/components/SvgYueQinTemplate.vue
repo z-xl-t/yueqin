@@ -1,20 +1,48 @@
 <script setup lang="ts">
 import type { YueQinOptionsType, SvgYueQinTemplateDataType } from '@/types'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
-  yueqinOptions: YueQinOptionsType,
+  yueqinOptions: YueQinOptionsType
   svgTemplateData: SvgYueQinTemplateDataType
 }>()
 
+const width = ref(0)
+const height = ref(0)
+const viewBoxStr = ref('0')
 
+watch(
+  () => props.yueqinOptions.scale,
+  (newValue, oldValue) => {
+    render()
+  },
+  { deep: true, immediate: true }
+)
+watch(
+  () => ({
+    baseWidth: props.svgTemplateData.svgBaseWidth,
+    baseHeight: props.svgTemplateData.svgBaseHeight
+  }),
+  () => {
+    render()
+  },
+  { deep: true, immediate: true }
+)
+
+function render() {
+  width.value = props.svgTemplateData.svgBaseWidth * props.yueqinOptions.scale
+  height.value = props.svgTemplateData.svgBaseHeight * props.yueqinOptions.scale
+  viewBoxStr.value = `0 0 ${props.svgTemplateData.svgBaseWidth} ${props.svgTemplateData.svgBaseHeight}`
+}
 </script>
 <template>
   <div class="svg-template">
     <svg
       version="1.1"
       baseProfile="full"
-      :width="svgTemplateData.svgBaseWidth"
-      :height="svgTemplateData.svgBaseHeight"
+      :width="width"
+      :height="height"
+      :viewBox="viewBoxStr"
       xmlns="http://www.w3.org/2000/svg"
       :font-size="svgTemplateData.svgFontSize"
     >
@@ -61,9 +89,8 @@ const props = defineProps<{
           {{ item.content }}
         </text>
       </g>
-      <g v-for="(item, i) in svgTemplateData.svgAllPoint" :key="i">
-
-        <!-- 点 -->
+      <!-- 点位 -->
+      <g v-for="(item, i) in svgTemplateData.svgYinPoint" :key="i">
         <circle
           v-for="(subItem, j) in item"
           :key="j"
@@ -73,38 +100,82 @@ const props = defineProps<{
         ></circle>
       </g>
       <!-- 简谱点位 -->
-      <g v-for="(item, i) in svgTemplateData.svgYinPoint" :key="i">
-        <g v-for="(subItem, j) in item" :key="j">
-          <text
-            :x="subItem.x + subItem?.offsetX + 3"
-            :y="subItem.y + subItem?.offsetY + (-4) * n  + (-14)"
-            v-for="(n, k) in Array.from({ length: svgTemplateData.svgYinJianPu[i][j].gao }, (_, i) => i + 1)"
-            :key="k"
-          >.</text>
-          <text :x="subItem.x + subItem?.offsetX" :y="subItem.y + subItem?.offsetY">{{
-            svgTemplateData.svgYinJianPu[i][j].base
-          }}</text>
-          <text
-            :x="subItem.x + subItem?.offsetX + 3"
-            :y="subItem.y + subItem?.offsetY + (4) * n + (2)"
-            v-for="(n, k) in Array.from({ length: svgTemplateData.svgYinJianPu[i][j].di }, (_, i) => i + 1)"
-            :key="k"
-          >.</text>
+      <g v-if="yueqinOptions.ifShowJianPu">
+        <g v-for="(item, i) in svgTemplateData.svgYinJianPu" :key="i">
+          <g v-for="(subItem, j) in item" :key="j">
+            <g v-if="subItem.jianPu.base.includes('#')">
+              <g v-if="yueqinOptions.ifShowSharp">
+                <text
+                :x="subItem.point.x + subItem.point?.offsetX + 3"
+                :y="subItem.point.y + subItem.point?.offsetY + -4 * n + -14"
+                v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
+                :key="k"
+              >
+                <tspan>.</tspan>
+              </text>
+              <text
+              :x="subItem.point.x + subItem.point?.offsetX"
+              :y="subItem.point.y + subItem.point?.offsetY"
+            >
+              <tspan>{{ subItem.jianPu.base }}</tspan>
+            </text>
+            <text
+              :x="subItem.point.x + subItem.point?.offsetX + 3"
+              :y="subItem.point.y + subItem.point?.offsetY + 4 * n + 2"
+              v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
+              :key="k"
+            >
+              .
+            </text>
+              </g>
+            </g>
+            <g v-else>
+              <text
+                :x="subItem.point.x + subItem.point?.offsetX + 3"
+                :y="subItem.point.y + subItem.point?.offsetY + -4 * n + -14"
+                v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
+                :key="k"
+              >
+                <tspan>.</tspan>
+              </text>
+              <text
+              :x="subItem.point.x + subItem.point?.offsetX"
+              :y="subItem.point.y + subItem.point?.offsetY"
+            >
+              <tspan>{{ subItem.jianPu.base }}</tspan>
+            </text>
+            <text
+              :x="subItem.point.x + subItem.point?.offsetX + 3"
+              :y="subItem.point.y + subItem.point?.offsetY + 4 * n + 2"
+              v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
+              :key="k"
+            >
+              .
+            </text>
+            </g>
+          </g>
         </g>
       </g>
       <!-- 固定音高点位 -->
-      <g v-for="(item, i) in svgTemplateData.svgYinPoint" :key="i">
-        <g v-for="(subItem, j) in item" :key="j">
-          <text :x="subItem.x + subItem?.offsetX" :y="subItem.y + subItem?.offsetY - 50">{{
-            `${svgTemplateData.svgYinPianoKey[i][j].basePiano } - ${svgTemplateData.svgYinPianoKey[i][j].current}`
-          }}</text>
-      
+      <g v-if="yueqinOptions.ifShowPianoKey">
+        <g v-for="(item, i) in svgTemplateData.svgYinPianoKey" :key="i">
+          <g v-for="(subItem, j) in item" :key="j">
+            <text
+              :x="subItem.point.x + subItem.point?.offsetX + 20"
+              :y="subItem.point.y + subItem.point?.offsetY - 20"
+            >
+              <tspan v-if="subItem.pianoKey.basePiano.includes('#')">
+                <tspan v-if="yueqinOptions.ifShowSharp">
+                  {{ `${subItem.pianoKey.basePiano}${subItem.pianoKey.current}` }}
+                </tspan>
+              </tspan>
+              <tspan v-else>{{ `${subItem.pianoKey.basePiano}${subItem.pianoKey.current}` }}</tspan>
+            </text>
+          </g>
         </g>
       </g>
     </svg>
   </div>
 </template>
 
-<style>
-
-</style>
+<style></style>
