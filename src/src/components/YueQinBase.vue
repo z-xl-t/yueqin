@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import equalTemperaments from '@/data/equalTemperaments'
 import { QSelect, useQuasar } from 'quasar'
 import SvgYueQinTemplate from '@/components/SvgYueQinTemplate.vue'
@@ -100,6 +100,15 @@ watch(
   },
   { deep: true }
 )
+
+// 只需要更新 options
+watch(
+  () => options.value.scale,
+  (newValue, oldValue) => {
+    updateOptions()
+  },
+  { deep: true, immediate: true }
+)
 </script>
 <template>
   <div class="yueqin">
@@ -113,7 +122,7 @@ watch(
         :options="equalTemperamentAll"
         label="调号"
       />
-      
+
       <div class="options-toggle">
         <q-toggle class="options-sharp" v-model="options.ifShowSharp" label="是否显示半音" />
         <q-toggle class="options-jianPu" v-model="options.ifShowJianPu" label="是否显示简谱音" />
@@ -131,18 +140,17 @@ watch(
         <q-slider v-model="options.pingNum" :min="13" :max="20" style="max-width: 200px" />
         <div class="desc">品数： {{ options.pingNum }}</div>
       </div>
-    
+
       <div class="options-slider">
-        <q-slider v-model="options.xianNum" :min="1" :max="4" style="max-width: 200px" />
+        <q-slider v-model="options.xianNum" :min="1" :max="6" style="max-width: 200px" />
         <div class="desc">弦数： {{ options.xianNum }}</div>
       </div>
-      <div>
+      <div class="options-xian-empty-wrapper">
         <div class="options-xian-empty" v-for="(item, i) in options.xianEmptyPianoKey" :key="i">
-          <div style="padding-right: 20px">第 {{ options.xianEmptyPianoKey.length - i }} 弦:</div>
+          <div style="padding-right: 10px">{{ options.xianEmptyPianoKey.length - i }} 弦:</div>
           <q-input style="width: 60px" v-model="item.basePiano" />
           <q-input style="width: 60px" v-model="item.current" />
         </div>
-
         <div class="options-explain">说明： 采用科学音高记法。</div>
         <div class="options-explain">C4 等于钢琴中小字一组的 c1</div>
       </div>
@@ -159,24 +167,27 @@ watch(
   height: 100vh;
 }
 .options {
-  width: 300px;
+  width: 400px;
   margin: 20px;
   display: flex;
   flex-direction: column;
   .options-reset,
   .options-select,
   .options-slider,
-  .options-xian-empty,
-  .options-toggle,
   .options-explain {
     margin: 8px 20px;
+  }
+
+  .options-toggle {
+    margin: 0px 6px;
+  }
+  .options-xian-empty {
+    margin: 0px 20px;
   }
   .options-slider {
     width: 100%;
     height: 40px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     .desc {
       margin-left: 10px;
       width: 100px;
@@ -187,7 +198,12 @@ watch(
     flex-direction: column;
   }
 }
+.options-xian-empty-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
 .options-xian-empty {
+  width: 40%;
   display: flex;
   align-items: center;
 }

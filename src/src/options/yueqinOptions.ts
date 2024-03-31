@@ -1,9 +1,9 @@
-
 import type { YueQinOptionsType } from '@/types'
 
 export const yueqinOptions = {
   localStorageKey: 'yueqinOptions',
   data: {} as YueQinOptionsType,
+
   setDefaultYueQinOptionsType: function () {
     this.data = {
       equalTemperament: {
@@ -14,7 +14,7 @@ export const yueqinOptions = {
       ifShowSharp: true,
       ifShowJianPu: true,
       ifShowPianoKey: true,
-      scale: 1,
+      scale: 0.5,
       xianNum: 4,
       pingNum: 16,
       xianEmptyPianoKey: [
@@ -22,28 +22,27 @@ export const yueqinOptions = {
         { baseIdx: 42, basePiano: 'D', current: 4 },
         { baseIdx: 47, basePiano: 'G', current: 4 },
         { baseIdx: 54, basePiano: 'D', current: 5 }
-      ],
+      ]
     }
   },
   initYueQinOptionsType: function () {
     // 尝试从 localStorage 加载数据
-    const localStorageData = this.getDataFromLocalStorage();
+    const localStorageData = this.getDataFromLocalStorage()
     if (localStorageData) {
-      this.data =  JSON.parse(localStorageData)
+      this.data = JSON.parse(localStorageData)
+    } else {
+      this.setDefaultYueQinOptionsType()
+      this.setDataToLocalStorage()
     }
-    else {
-       this.setDefaultYueQinOptionsType()
-       this.setDataToLocalStorage();
-    }
-},
-  getDataFromLocalStorage: function() {
-    return localStorage.getItem(this.localStorageKey);
   },
-  setDataToLocalStorage: function() {
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.data));
+  getDataFromLocalStorage: function () {
+    return localStorage.getItem(this.localStorageKey)
   },
-  resetYueQinOptionsType: function(){
-    this.setDefaultYueQinOptionsType();
-    this.setDataToLocalStorage();
+  setDataToLocalStorage: function () {
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.data))
+  },
+  resetYueQinOptionsType: function () {
+    this.setDefaultYueQinOptionsType()
+    this.setDataToLocalStorage()
   }
 }

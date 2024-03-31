@@ -1,5 +1,5 @@
 import 'normalize.css'
-import './assets/main.css'// 
+import './assets/main.css'
 // Import Quasar css
 import 'quasar/src/css/index.sass'
 // Import icon libraries
@@ -13,8 +13,7 @@ import router from './router'
 
 const app = createApp(App)
 app.use(Quasar, {
-  plugins: {Notify}, // import Quasar plugins and add here
-
+  plugins: { Notify } // import Quasar plugins and add here
 })
 app.use(createPinia())
 app.use(router)

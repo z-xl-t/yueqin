@@ -6,7 +6,7 @@ const cEqualTemperament: EqualTemperamentType = {
   jianPuBaseKey: { base: '1', gao: 0, di: 0 },
   pianoBaseKey: { baseIdx: 40, basePiano: 'C', current: 4 }
 }
- 
+
 // D 大调
 const dEqualTemperament: EqualTemperamentType = {
   comment: 'D大调 D4',
@@ -18,7 +18,7 @@ const dEqualTemperament: EqualTemperamentType = {
 const bEEqualTemperament: EqualTemperamentType = {
   comment: 'bE大调 D#4 bE4',
   jianPuBaseKey: { base: '1', gao: 0, di: 0 },
-  pianoBaseKey: { baseIdx: 43, basePiano: 'D#', current: 4}
+  pianoBaseKey: { baseIdx: 43, basePiano: 'D#', current: 4 }
 }
 
 const fEqualTemperament: EqualTemperamentType = {
@@ -39,11 +39,10 @@ const aEqualTemperament: EqualTemperamentType = {
 const bBEqualTemperament: EqualTemperamentType = {
   comment: 'bB大调 A#4 bB4',
   jianPuBaseKey: { base: '1', gao: 0, di: 0 },
-  pianoBaseKey: { baseIdx: 50, basePiano: 'A#', current: 4}
+  pianoBaseKey: { baseIdx: 50, basePiano: 'A#', current: 4 }
 }
 
 const equalTemperaments = [
-
   cEqualTemperament,
   dEqualTemperament,
   bEEqualTemperament,
@@ -53,5 +52,4 @@ const equalTemperaments = [
   bBEqualTemperament
 ]
 
-
-export  default equalTemperaments
+export default equalTemperaments

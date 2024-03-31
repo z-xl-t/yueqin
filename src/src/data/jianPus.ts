@@ -119,6 +119,18 @@ const jianPus: JianPuType[] = [
   { base: '6#', gao: 4, di: 0 },
   { base: '7', gao: 4, di: 0 },
 
+  { base: '1', gao: 5, di: 0 },
+  { base: '1#', gao: 5, di: 0 },
+  { base: '2', gao: 5, di: 0 },
+  { base: '2#', gao: 5, di: 0 },
+  { base: '3', gao: 5, di: 0 },
+  { base: '4', gao: 5, di: 0 },
+  { base: '4#', gao: 5, di: 0 },
+  { base: '5', gao: 5, di: 0 },
+  { base: '5#', gao: 5, di: 0 },
+  { base: '6', gao: 5, di: 0 },
+  { base: '6#', gao: 5, di: 0 },
+  { base: '7', gao: 5, di: 0 }
 ]
 
 export { jianPus }

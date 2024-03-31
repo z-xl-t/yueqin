@@ -106,27 +106,27 @@ function render() {
             <g v-if="subItem.jianPu.base.includes('#')">
               <g v-if="yueqinOptions.ifShowSharp">
                 <text
-                :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
-                :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + -4 * n + -14"
-                v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
-                :key="k"
-              >
-                <tspan>.</tspan>
-              </text>
-              <text
-              :x="subItem.point.x + (subItem.point?.offsetX ?? 0)"
-              :y="subItem.point.y + (subItem.point?.offsetY ?? 0)"
-            >
-              <tspan>{{ subItem.jianPu.base }}</tspan>
-            </text>
-            <text
-              :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
-              :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + 4 * n + 2"
-              v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
-              :key="k"
-            >
-              .
-            </text>
+                  :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+                  :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + -4 * n + -14"
+                  v-for="(n, k) in Array.from({ length: subItem.jianPu.gao }, (_, i) => i + 1)"
+                  :key="k"
+                >
+                  <tspan>.</tspan>
+                </text>
+                <text
+                  :x="subItem.point.x + (subItem.point?.offsetX ?? 0)"
+                  :y="subItem.point.y + (subItem.point?.offsetY ?? 0)"
+                >
+                  <tspan>{{ subItem.jianPu.base }}</tspan>
+                </text>
+                <text
+                  :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+                  :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + 4 * n + 2"
+                  v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
+                  :key="k"
+                >
+                  .
+                </text>
               </g>
             </g>
             <g v-else>
@@ -139,19 +139,19 @@ function render() {
                 <tspan>.</tspan>
               </text>
               <text
-              :x="subItem.point.x + (subItem.point?.offsetX ?? 0)"
-              :y="subItem.point.y + (subItem.point?.offsetY ?? 0)"
-            >
-              <tspan>{{ subItem.jianPu.base }}</tspan>
-            </text>
-            <text
-              :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
-              :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + 4 * n + 2"
-              v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
-              :key="k"
-            >
-              .
-            </text>
+                :x="subItem.point.x + (subItem.point?.offsetX ?? 0)"
+                :y="subItem.point.y + (subItem.point?.offsetY ?? 0)"
+              >
+                <tspan>{{ subItem.jianPu.base }}</tspan>
+              </text>
+              <text
+                :x="subItem.point.x + (subItem.point?.offsetX ?? 0) + 3"
+                :y="subItem.point.y + (subItem.point?.offsetY ?? 0) + 4 * n + 2"
+                v-for="(n, k) in Array.from({ length: subItem.jianPu.di }, (_, i) => i + 1)"
+                :key="k"
+              >
+                .
+              </text>
             </g>
           </g>
         </g>
