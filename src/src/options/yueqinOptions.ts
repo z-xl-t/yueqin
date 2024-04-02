@@ -14,7 +14,7 @@ export const yueqinOptions = {
       ifShowSharp: true,
       ifShowJianPu: true,
       ifShowPianoKey: true,
-      scale: 0.5,
+      scale: 1,
       xianNum: 4,
       pingNum: 16,
       xianEmptyPianoKey: [

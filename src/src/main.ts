@@ -1,5 +1,4 @@
 import 'normalize.css'
-import './assets/main.css'
 // Import Quasar css
 import 'quasar/src/css/index.sass'
 // Import icon libraries

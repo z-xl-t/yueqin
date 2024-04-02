@@ -1,0 +1,12 @@
+// 基本布局
+@mixin pc-layout {
+  @media screen and (min-width: 413px) {
+    @content;
+  }
+}
+
+@mixin sp-layout {
+  @media screen and (max-width: 412px) {
+    @content;
+  }
+}

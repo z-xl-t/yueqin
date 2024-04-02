@@ -178,4 +178,12 @@ function render() {
   </div>
 </template>
 
-<style></style>
+<style lang="scss" scoped>
+.svg-template {
+  overflow: auto;
+  display: flex;
+  svg {
+    margin: 0 auto;
+  }
+}
+</style>

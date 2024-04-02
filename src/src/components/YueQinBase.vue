@@ -138,20 +138,21 @@ watch(
       </div>
       <div class="options-slider">
         <q-slider v-model="options.pingNum" :min="13" :max="20" style="max-width: 200px" />
-        <div class="desc">品数： {{ options.pingNum }}</div>
+        <div class="desc">品数: {{ options.pingNum }}</div>
       </div>
 
       <div class="options-slider">
         <q-slider v-model="options.xianNum" :min="1" :max="6" style="max-width: 200px" />
-        <div class="desc">弦数： {{ options.xianNum }}</div>
+        <div class="desc">弦数: {{ options.xianNum }}</div>
       </div>
       <div class="options-xian-empty-wrapper">
         <div class="options-xian-empty" v-for="(item, i) in options.xianEmptyPianoKey" :key="i">
-          <div style="padding-right: 10px">{{ options.xianEmptyPianoKey.length - i }} 弦:</div>
-          <q-select style="width: 60px" v-model="item.basePiano" :options="basePianoOptions" />
-
-          <q-select style="width: 60px" v-model="item.current" :options="currentOptions" />
+          <div style="padding-right: 10px">第 {{ options.xianEmptyPianoKey.length - i }} 弦:</div>
+          <q-select v-model="item.basePiano" :options="basePianoOptions" />
+          <q-select v-model="item.current" :options="currentOptions" />
         </div>
+      </div>
+      <div class="options-explain-wrapper">
         <div class="options-explain">说明： 采用科学音高记法。</div>
         <div class="options-explain">C4 等于钢琴中小字一组的 c1</div>
       </div>
@@ -162,16 +163,33 @@ watch(
   </div>
 </template>
 <style scoped lang="scss">
+@import '@/assets/mixin.scss';
+
 .yueqin {
   display: flex;
   width: 100vw;
   height: 100vh;
+  overflow: auto;
+  @include pc-layout() {
+  }
+
+  @include sp-layout() {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
 }
+
 .options {
-  width: 400px;
-  margin: 20px;
   display: flex;
   flex-direction: column;
+  @include pc-layout() {
+    width: 400px;
+    margin: 20px;
+  }
+  @include sp-layout() {
+    width: 100vw;
+  }
   .options-reset,
   .options-select,
   .options-slider,
@@ -198,18 +216,28 @@ watch(
     display: flex;
     flex-direction: column;
   }
-}
-.options-xian-empty-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-}
-.options-xian-empty {
-  width: 40%;
-  display: flex;
-  align-items: center;
+
+  .options-xian-empty-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+
+    .options-xian-empty {
+      width: 40%;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .options-explain-wrapper {
+    margin-top: 20px;
+  }
 }
 .render {
-  flex: 1;
-  overflow: auto;
+  @include pc-layout() {
+    flex: 1;
+  }
+  @include sp-layout() {
+    width: 100vw;
+  }
 }
 </style>
