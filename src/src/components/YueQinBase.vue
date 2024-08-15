@@ -16,7 +16,6 @@ import { pianoKeys } from '@/data/pianoKeys'
 const $q = useQuasar()
 
 const equalTemperamentAll = ref([] as EqualTemperamentType[])
-const yueOptionResetFlag = ref(false)
 const options = ref({} as YueQinOptionsType)
 const svgTemplateData = ref({} as SvgYueQinTemplateDataType)
 
@@ -35,7 +34,6 @@ function updateOptions() {
 function resetOptions() {
   yueqinOptions.resetYueQinOptionsType()
   options.value = yueqinOptions.data
-  yueOptionResetFlag.value = true
   updateAll()
 }
 function updateAll() {
@@ -70,11 +68,6 @@ watch(
   () => options.value.xianNum,
   (newValue, oldValue) => {
     if (newValue > oldValue) {
-      if (yueOptionResetFlag.value) {
-        // 重置标记
-        yueOptionResetFlag.value = false
-        return
-      }
       // 相对之前增加弦数，则默认增加 G3 弦
       for (let i = oldValue; i < newValue; ++i) {
         options.value.xianEmptyPianoKey.push({ baseIdx: 35, basePiano: 'G', current: 3 })
