@@ -1,7 +1,6 @@
 <template>
   <ClientOnly>
     <div ref="paperRef" class="render-abc"></div>
-    <!-- // todo -->
     <div v-if="props.isplay">
       <div ref="audioRef" class="render-audio"></div>
     </div>
@@ -37,14 +36,28 @@ onMounted(async () => {
   if (paperRef.value) {
     visualObj.value = abcjs.renderAbc(paperRef.value, props.abc, defaultOptions, props.options)
   }
+  if (abcjs.synth.supportsAudio()) {
+    const synthControl = new abcjs.synth.SynthController()
+    synthControl.load(audioRef.value, null, {
+      displayLoop: true,
+      displayRestart: true,
+      displayPlay: true,
+      displayProgress: true,
+      displayWarp: true,
+    })
+    const createSynth = new abcjs.synth.CreateSynth()
+    const audioParams = { chordsOff: true }
+    createSynth
+      .init({ visualObj: visualObj.value[0] })
+      .then(function () {
+        synthControl.setTune(visualObj.value[0], false, audioParams)
+      })
+      .catch(function (error) {
+        console.warn('Audio problem:', error)
+      })
+  } else {
+    const audioElement = this.$refs.audioRef
+    audioElement.innerHTML = 'Audio is not supported in this browser.'
+  }
 })
-
-// 暴露给父组件的方法
-defineExpose({
-  getObj() {
-    return visualObj.value ? visualObj.value[0] : null
-  },
-})
-
-// todo: 播放音频
 </script>
